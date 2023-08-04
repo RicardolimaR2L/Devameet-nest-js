@@ -13,9 +13,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, // Vai habilitar a transformação do que chega para os nossos objetos.
-      whitelist: true, // Deixa converter somente o que foi mapeado.
-      forbidNonWhitelisted: false, // não deixa retornar erros caso chegue algum campo inesperado
+      transform: true, // transforma automaticamente os dados de entrada para os tipos definidos em suas classes de destino. 
+      whitelist: true, // converterá somente as propriedades dos objetos de entrada que estão definidas nas classes de destino.
+      forbidNonWhitelisted: false, // permitirá que objetos de entrada contenham campos não definidos na classe de destino. Se algum campo inesperado for fornecido, o pipe não retornará erros e permitirá que o objeto seja processado.
     }),
   );
 
