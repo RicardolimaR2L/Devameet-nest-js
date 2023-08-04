@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
-
 //Criação da função Bootstrap
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -13,7 +12,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, // transforma automaticamente os dados de entrada para os tipos definidos em suas classes de destino. 
+      transform: true, // transforma automaticamente os dados de entrada para os tipos definidos em suas classes de destino.
       whitelist: true, // converterá somente as propriedades dos objetos de entrada que estão definidas nas classes de destino.
       forbidNonWhitelisted: false, // permitirá que objetos de entrada contenham campos não definidos na classe de destino. Se algum campo inesperado for fornecido, o pipe não retornará erros e permitirá que o objeto seja processado.
     }),
