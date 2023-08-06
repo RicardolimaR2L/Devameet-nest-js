@@ -5,22 +5,20 @@ import { User, UserDocument } from './user.schema';
 import { RegisterDto } from './dtos/register.dto';
 import * as CryptoJS from 'crypto-js';
 
-
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
- 
-
-  async create(dto: RegisterDto){
-    dto.password = CryptoJS.AES.encrypt(dto.password, process.env.USER_CYPHER_SECRET_KEY).toString();
-
+  async create(dto: RegisterDto) {
+    dto.password = CryptoJS.AES.encrypt(
+      dto.password,
+      process.env.USER_CYPHER_SECRET_KEY,
+    ).toString();
     const createdUser = new this.userModel(dto);
     await createdUser.save();
-}
-
+  }
   async existsByEmail(email: String): Promise<boolean> {
     const result = await this.userModel.findOne({ email });
     if (result) {
@@ -28,5 +26,25 @@ export class UserService {
     }
 
     return false;
+  }
+
+  async getUserByLoginPassword(
+    email: String,
+    password: String,
+  ): Promise<UserDocument> | null {
+    const user = (await this.userModel.findOne({ email })) as UserDocument;
+    if (user) {
+      const bytes = CryptoJS.AES.decrypt(
+        user.password,
+        process.env.USER_CYPHER_SECRET_KEY,
+      );
+
+      const savedPassword = bytes.toString(CryptoJS.enc.Utf8);
+
+      if (password == savedPassword) {
+        return user;
+      }
+    }
+    return null;
   }
 }
