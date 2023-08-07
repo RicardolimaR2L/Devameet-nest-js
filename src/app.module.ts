@@ -15,7 +15,7 @@ import { JwtAuthGuard } from './auth/guards/jwt.guards';
   ],
   controllers: [],
   providers: [
-    {provide: APP_GUARD, useClass: JwtAuthGuard} //traz pra todo o sistema o Guard  fazendo todo ele estar protegido.
+    {provide: APP_GUARD, useClass: JwtAuthGuard}
   ],
 })
 export class AppModule {}
