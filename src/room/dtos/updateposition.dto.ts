@@ -14,7 +14,6 @@ export class UpdateUserPostionDto extends JoinRoomDto {
  y:number; 
  
  @IsString({message: MeetMessageHelper.UPDATE_ORIENTATION_NOT_VALID})
-  orientation:number; 
+  orientation:string; 
   
- 
 } 

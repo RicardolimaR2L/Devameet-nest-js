@@ -9,3 +9,5 @@ export class UpdateUserDto{
   @IsString()
   avatar:string;
 }
+
+export default {UpdateUserDto}
