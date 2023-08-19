@@ -56,7 +56,8 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
     const { link, userId } = payload;
 
     const existingOnSocket = this.activeSockets.find(
-      socket => socket.room === link && socket.id === client.id);
+      (socket) => socket.room === link && socket.id === client.id,
+    );
 
     if (!existingOnSocket) {
       this.activeSockets.push({ room: link, id: client.id, userId });
@@ -66,11 +67,21 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
         userId,
         x: 1,
         y: 1,
-        orientation: 'front'
-      } as UpdateUserPostionDto
+        orientation: 'front',
+      } as UpdateUserPostionDto;
+
+      //função para gerar as posições de forma aleatória
+      function randomPosition(min, max) {
+        if (dto.x && dto.y == 1) {
+          dto.x = Math.floor(Math.random() * (max - min + 1)) + min;
+          dto.y = Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+      }
+      randomPosition(1, 8);
 
       await this.service.updateUserPosition(client.id, dto);
 
+      await this.service.updateUserPosition(client.id, dto);
     }
 
     const users = await this.service.listenUsersPositionByLink(link);
@@ -91,8 +102,8 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
       userId,
       x,
       y,
-      orientation
-    } as UpdateUserPostionDto
+      orientation,
+    } as UpdateUserPostionDto;
 
     await this.service.updateUserPosition(client.id, dto);
     const users = await this.service.listenUsersPositionByLink(link);
