@@ -15,6 +15,7 @@ import { ToglMuteDto } from './dtos/toglMute.Dto';
 @Injectable()
 export class RoomService {
   private logger = new Logger(RoomService.name);
+  MeetModel: any;
 
   constructor(
     @InjectModel(Meet.name) private readonly meetModel: Model<MeetDocument>,
@@ -87,6 +88,7 @@ export class RoomService {
     }
   }
 
+
   async updateUserMute(dto: ToglMuteDto) {
     this.logger.debug(` updateUserMute -${dto.link} - ${dto.userId}`);
 
@@ -95,6 +97,10 @@ export class RoomService {
     await this.positionModel.updateMany({ user, meet }), { muted: dto.muted };
   }
 
+  async findUserPosition(link: string, userId: string) {
+    const meet = await this.meetModel.findOne({ link });
+    return await this.positionModel.find({ meet: meet._id, user: userId });
+  }
   async _getMeet(link: string) {
     const meet = await this.meetModel.findOne({ link });
     if (!meet) {

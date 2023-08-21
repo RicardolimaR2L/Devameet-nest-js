@@ -13,6 +13,7 @@ import { JoinRoomDto } from './dtos/joinroom.dto';
 import { UpdateUserPostionDto } from './dtos/updateposition.dto';
 import { ToglMuteDto } from './dtos/toglMute.dto';
 
+
 type ActiveSocketType = {
   room: String;
   id: string;
@@ -61,39 +62,47 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
 
     if (!existingOnSocket) {
       this.activeSockets.push({ room: link, id: client.id, userId });
+      const previousPosition = await this.service.findUserPosition(
+        link,
+        userId,
+      );
+      const usersInRoom = await this.service.listenUsersPositionByLink(link);
+
+      let x = 1;
+      let y = 1;
+      if (previousPosition.length > 0) {
+        x = previousPosition[0].x;
+        y = previousPosition[0].y;
+      }
 
       const dto = {
         link,
         userId,
-        x: 1,
-        y: 1,
+        x: x,
+        y: y,
         orientation: 'front',
+        inRoom: true,
       } as UpdateUserPostionDto;
 
-      //função para gerar as posições de forma aleatória
-      function randomPosition(min, max) {
-        if (dto.x && dto.y == 1) {
-          dto.x = Math.floor(Math.random() * (max - min + 1)) + min;
-          dto.y = Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+      const userFound = usersInRoom.find(
+        (user) => user.x === dto.x && user.y === dto.y,
+      );
+      if (userFound) { 
+        dto.x = Math.floor(Math.random() * 8) + 1;
+        dto.y = Math.floor(Math.random() * 8) + 1;
       }
-      randomPosition(1, 8);
 
       await this.service.updateUserPosition(client.id, dto);
 
-      await this.service.updateUserPosition(client.id, dto);
-    }
+      const users = await this.service.listenUsersPositionByLink(link);
 
-    const users = await this.service.listenUsersPositionByLink(link);
-    this.wss.emit(`${link}-update-user-list`, { users });
+      this.wss.emit(`${link}-update-user-list`, { users });
 
-    if (!existingOnSocket) {
       client.broadcast.emit(`${link}-add-user`, { user: client.id });
     }
 
     this.logger.debug(`Socket client: ${client.id} start to join room ${link}`);
   }
-
   @SubscribeMessage('move')
   async handleMove(client: Socket, payload: UpdateUserPostionDto) {
     const { link, userId, x, y, orientation } = payload;
@@ -123,7 +132,7 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
     this.logger.debug(`callUser: ${client.id} to: ${data.to}`);
     client.to(data.to).emit('call-made', {
       offer: data.offer,
-      socket: client.id
+      socket: client.id,
     });
   }
 
@@ -132,7 +141,7 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
     this.logger.debug(`makeAnswer: ${client.id} to: ${data.to}`);
     client.to(data.to).emit('answer-made', {
       answer: data.answer,
-      socket: client.id
+      socket: client.id,
     });
   }
 }
