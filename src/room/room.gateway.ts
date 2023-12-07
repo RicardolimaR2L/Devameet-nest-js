@@ -11,7 +11,7 @@ import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { JoinRoomDto } from './dtos/joinroom.dto';
 import { UpdateUserPostionDto } from './dtos/updateposition.dto';
-import { ToglMuteDto } from './dtos/toglMute.dto';
+import { ToglMuteDto } from './dtos/toglMute.Dto';
 
 
 type ActiveSocketType = {
