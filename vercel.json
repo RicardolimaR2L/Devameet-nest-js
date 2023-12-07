@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.module.ts",
+      "use": "@now/node"
+    }
+  ],
+  "public": false
+}
