@@ -18,8 +18,8 @@ export class UpdateMeetDto extends CreateMeetDto {
   objects: Array<UpdateMeetObjectDto>;
 }
 export class UpdateMeetObjectDto {
-  @IsNotEmpty({message: MeetMessageHelper.UPDATE_OBJECT_NAME_NOT_FOUND})
-    name:string;
+  @IsNotEmpty({ message: MeetMessageHelper.UPDATE_OBJECT_NAME_NOT_FOUND })
+  name: string;
 
   @IsNumber({}, { message: MeetMessageHelper.UPDATE_XY_NOT_VALID })
   @Min(0, { message: MeetMessageHelper.UPDATE_XY_NOT_VALID })
@@ -31,8 +31,8 @@ export class UpdateMeetObjectDto {
   @Max(8, { message: MeetMessageHelper.UPDATE_XY_NOT_VALID })
   y: number;
 
-  @IsNumber({}, {message: MeetMessageHelper.UPDATE_ZINDEX_NOT_VALID })
-  zIndex: number;
+  @IsNumber({}, { message: MeetMessageHelper.UPDATE_zindex_NOT_VALID })
+  zindex: number;
 
   @IsString({ message: MeetMessageHelper.UPDATE_ORIENTATION_NOT_VALID })
   orientation: string;
