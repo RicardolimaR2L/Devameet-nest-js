@@ -9,7 +9,7 @@ import {
 import { Position, PositionDocument } from './schemas/position.schema';
 import { UserService } from 'src/user/user.service';
 import { RoomMessagesHelper } from './helpers/roommessage.helper';
-import { UpdateUserPostionDto } from './dtos/updateposition.dto';
+import { UpdateUserPositionDto } from './dtos/updateposition.dto';
 import { ToglMuteDto } from './dtos/toglMute.Dto';
 
 @Injectable()
@@ -50,7 +50,7 @@ export class RoomService {
     return await this.positionModel.deleteMany({ clientId });
   }
 
-  async updateUserPosition(clientId: string, dto: UpdateUserPostionDto) {
+  async updateUserPosition(clientId: string, dto: UpdateUserPositionDto) {
     this.logger.debug(` updateUsersPosition - ${dto.link}`);
     const meet = await this._getMeet(dto.link);
     const user = await this.userService.getUserById(dto.userId);
@@ -90,11 +90,11 @@ export class RoomService {
 
 
   async updateUserMute(dto: ToglMuteDto) {
+    console.log(dto.muted)
     this.logger.debug(` updateUserMute -${dto.link} - ${dto.userId}`);
-
     const meet = await this._getMeet(dto.link);
     const user = await this.userService.getUserById(dto.userId);
-    await this.positionModel.updateMany({ user, meet }), { muted: dto.muted };
+    await this.positionModel.updateMany({ user, meet },{ muted: dto.muted });
   }
 
   async findUserPosition(link: string, userId: string) {

@@ -10,7 +10,7 @@ import { RoomService } from './room.service';
 import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { JoinRoomDto } from './dtos/joinroom.dto';
-import { UpdateUserPostionDto } from './dtos/updateposition.dto';
+import { UpdateUserPositionDto } from './dtos/updateposition.dto';
 import { ToglMuteDto } from './dtos/toglMute.Dto';
 
 
@@ -82,7 +82,7 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
         y: y,
         orientation: 'front',
         inRoom: true,
-      } as UpdateUserPostionDto;
+      } as UpdateUserPositionDto;
 
       const userFound = usersInRoom.find(
         (user) => user.x === dto.x && user.y === dto.y,
@@ -104,7 +104,7 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
     this.logger.debug(`Socket client: ${client.id} start to join room ${link}`);
   }
   @SubscribeMessage('move')
-  async handleMove(client: Socket, payload: UpdateUserPostionDto) {
+  async handleMove(client: Socket, payload: UpdateUserPositionDto) {
     const { link, userId, x, y, orientation } = payload;
     const dto = {
       link,
@@ -112,7 +112,7 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
       x,
       y,
       orientation,
-    } as UpdateUserPostionDto;
+    } as UpdateUserPositionDto;
 
     await this.service.updateUserPosition(client.id, dto);
     const users = await this.service.listenUsersPositionByLink(link);
@@ -122,6 +122,7 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
   @SubscribeMessage('toggl-mute-user')
   async handleToglMute(_: Socket, payload: ToglMuteDto) {
     const { link } = payload;
+    console.log(payload)
     await this.service.updateUserMute(payload);
     const users = await this.service.listenUsersPositionByLink(link);
     this.wss.emit(`${link}-update-user-list`, { users });
@@ -145,3 +146,4 @@ export class RoomGateway implements OnGatewayInit, OnGatewayDisconnect {
     });
   }
 }
+

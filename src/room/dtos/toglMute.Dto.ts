@@ -6,7 +6,7 @@ export class ToglMuteDto extends JoinRoomDto{
  
  
  @IsBoolean({message: RoomMessagesHelper.MUTE_NOT_VALID})
-  muted:number; 
+  muted:boolean; 
   
  
 } 
