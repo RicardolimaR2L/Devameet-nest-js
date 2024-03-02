@@ -84,13 +84,10 @@ export class RoomService {
         throw new BadRequestException(RoomMessagesHelper.ROOM_MAX_USERS);
       }
 
-      await this.positionModel.create(position);
+      await this.positionModel.create(position); 
     }
   }
-
-
   async updateUserMute(dto: ToglMuteDto) {
-    console.log(dto.muted)
     this.logger.debug(` updateUserMute -${dto.link} - ${dto.userId}`);
     const meet = await this._getMeet(dto.link);
     const user = await this.userService.getUserById(dto.userId);
@@ -109,3 +106,4 @@ export class RoomService {
     return meet;
   }
 }
+ 
