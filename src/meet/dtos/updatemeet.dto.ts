@@ -7,6 +7,7 @@ import {
   Min,
   Max,
   IsString,
+  IsBoolean,
 } from 'class-validator';
 import { CreateMeetDto } from './createmeet.dto';
 import { MeetMessageHelper } from '../helpers/meetmessagesHelper';
@@ -31,8 +32,21 @@ export class UpdateMeetObjectDto {
   @Max(8, { message: MeetMessageHelper.UPDATE_XY_NOT_VALID })
   y: number;
 
+  @IsNumber({}, {message: MeetMessageHelper.UPDATE_WIDTH_HEIGHT_NOT_VALID})
+  @Min(0, {message: MeetMessageHelper.UPDATE_XY_NOT_VALID})
+  @Max(8, {message: MeetMessageHelper.UPDATE_XY_NOT_VALID})
+  width: number;
+
+  @IsNumber({}, {message: MeetMessageHelper.UPDATE_WIDTH_HEIGHT_NOT_VALID})
+  @Min(0, {message: MeetMessageHelper.UPDATE_XY_NOT_VALID})
+  @Max(8, {message: MeetMessageHelper.UPDATE_XY_NOT_VALID})
+  height: number;
+
+  @IsBoolean({message: MeetMessageHelper.UPDATE_CAN_WALK_NOT_VALID})
+  canWalkOver: boolean;
+
   @IsNumber({}, { message: MeetMessageHelper.UPDATE_zindex_NOT_VALID })
-  zindex: number;
+  zIndex: number;
 
   @IsString({ message: MeetMessageHelper.UPDATE_ORIENTATION_NOT_VALID })
   orientation: string;

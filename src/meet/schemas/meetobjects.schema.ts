@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import * as mongoose from 'mongoose';
 import { Meet } from './meet.schema';
+import mongoose, { HydratedDocument } from 'mongoose';
 
 export type MeetObjectDocument = HydratedDocument<MeetObject>;
 
@@ -36,3 +35,4 @@ export class MeetObject {
 }
 
 export const MeetObjectSchema = SchemaFactory.createForClass(MeetObject);
+
